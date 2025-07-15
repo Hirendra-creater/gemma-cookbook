@@ -1,0 +1,8 @@
+class EmotionResponder:
+    def respond(self, text: str):
+        if "sad" in text.lower():
+            return "I'm here for you. Want to talk about it?"
+        elif "excited" in text.lower():
+            return "That's awesome! Tell me more!"
+        else:
+            return "Got it. Let's keep going."
