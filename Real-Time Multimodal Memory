@@ -1,0 +1,56 @@
+import json
+import os
+from datetime import datetime
+from typing import List, Dict, Optional
+
+MEMORY_PATH = "memory_data"
+os.makedirs(MEMORY_PATH, exist_ok=True)
+
+class PrivacyManager:
+    def __init__(self):
+        self.flags = {}
+
+    def set_flag(self, session_id: str, allow: bool):
+        self.flags[session_id] = allow
+
+    def is_allowed(self, session_id: str) -> bool:
+        return self.flags.get(session_id, True)
+
+class MemoryStore:
+    def __init__(self, session_id: str):
+        self.session_id = session_id
+        self.file_path = os.path.join(MEMORY_PATH, f"{session_id}.json")
+        self.entries = self._load()
+
+    def _load(self) -> List[Dict]:
+        if os.path.exists(self.file_path):
+            with open(self.file_path, "r") as f:
+                return json.load(f)
+        return []
+
+    def add(self, modality: str, content: str):
+        entry = {
+            "modality": modality,
+            "content": content,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        self.entries.append(entry)
+        self._save()
+
+    def _save(self):
+        with open(self.file_path, "w") as f:
+            json.dump(self.entries, f, indent=2)
+
+    def recall(self) -> List[Dict]:
+        return self.entries
+
+class ContextLinker:
+    def link(self, entries: List[Dict]) -> List[Dict]:
+        links = []
+        for i in range(len(entries) - 1):
+            links.append({
+                "from": entries[i]["content"],
+                "to": entries[i + 1]["content"],
+                "relation": f"{entries[i]['modality']} ➡ {entries[i + 1]['modality']}"
+            })
+        return links
