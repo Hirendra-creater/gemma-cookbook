@@ -1,0 +1,11 @@
+import json
+
+class KnowledgeUpdater:
+    def __init__(self):
+        self.knowledge_base = {}
+
+    def update(self, source: str, data: dict):
+        self.knowledge_base[source] = data
+
+    def get_latest(self, source: str):
+        return self.knowledge_base.get(source, {})
