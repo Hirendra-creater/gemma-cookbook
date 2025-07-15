@@ -1,0 +1,25 @@
+from multimodal_memory import PrivacyManager, MemoryStore, ContextLinker
+
+session_id = "user_session_2025"
+privacy = PrivacyManager()
+privacy.set_flag(session_id, allow=True)
+
+if privacy.is_allowed(session_id):
+    memory = MemoryStore(session_id)
+    memory.add("text", "User asked about Dubai weather")
+    memory.add("image", "Weather forecast screenshot")
+    memory.add("text", "User requested restaurant suggestions")
+
+    entries = memory.recall()
+    linker = ContextLinker()
+    links = linker.link(entries)
+
+    print("🔁 Recalled Entries:")
+    for e in entries:
+        print(e)
+
+    print("\n🔗 Contextual Links:")
+    for l in links:
+        print(l)
+else:
+    print("🚫 Memory storage disabled for this session.")
