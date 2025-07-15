@@ -1,0 +1,8 @@
+from googletrans import Translator
+
+class MultilingualChat:
+    def __init__(self):
+        self.translator = Translator()
+
+    def translate(self, text: str, dest_lang: str):
+        return self.translator.translate(text, dest=dest_lang).text
