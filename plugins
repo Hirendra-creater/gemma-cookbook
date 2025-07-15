@@ -1,0 +1,9 @@
+import importlib
+
+class PluginLoader:
+    def load_plugin(self, plugin_name: str):
+        try:
+            module = importlib.import_module(plugin_name)
+            return module
+        except ImportError:
+            return None
